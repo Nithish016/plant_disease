@@ -1,15 +1,9 @@
-venv/
-__pycache__/
-*.pyc
-.dist/
+Data_to_consider/
+References/
+TEST_Project/
+.ipynb_checkpoints/
 .vscode/
-uploads/
-my_model*.keras
-*.log
-dataset/
-Result/
-*Feature_extraction/
-Feature extraction/
-*Results.csv
-
-
+__pycache__/
+New Plant Diseases Dataset(Augmented)/
+Docs/
+.DS_Store

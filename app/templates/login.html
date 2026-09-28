@@ -1,0 +1,291 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<style>
+    body {
+        background-color: #f1f5f9;
+    }
+    .auth-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e2e8f0;
+        padding: 35px;
+        margin: 40px auto;
+        max-width: 520px;
+    }
+    .nav-tabs .nav-link {
+        color: #64748b;
+        font-weight: 700;
+        border: none;
+        border-bottom: 3px solid transparent;
+        padding: 10px 16px;
+        font-size: 15px;
+    }
+    .nav-tabs .nav-link.active {
+        color: #2ecc71;
+        border-bottom: 3px solid #2ecc71;
+        background: transparent;
+    }
+    .badge-pill-custom {
+        background-color: #e8f8f0;
+        color: #27ae60;
+        font-weight: 700;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        display: inline-block;
+        margin-bottom: 12px;
+    }
+    .preset-btn {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 10px 14px;
+        text-align: left;
+        width: 100%;
+        margin-bottom: 8px;
+        transition: all 0.2s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .preset-btn:hover {
+        background: #e8f8f0;
+        border-color: #2ecc71;
+        transform: translateY(-2px);
+    }
+</style>
+
+<!-- Clerk JavaScript SDK CDN -->
+<script
+  async
+  crossorigin="anonymous"
+  data-clerk-publishable-key="{{ clerk_publishable_key }}"
+  src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+  type="text/javascript"
+></script>
+
+<div class="container py-4">
+    <div class="auth-card">
+        <!-- Logo and Heading -->
+        <div class="text-center mb-4">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Kisan AI" style="width: 75px; height: 75px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 12px rgba(46,204,113,0.25);" class="mb-2">
+            <h3 class="font-weight-bold" style="color: #0f172a;">Welcome to Kisan AI</h3>
+            <p class="text-muted" style="font-size: 14px;">Sign in to manage your fields, run simulations, and access personalized crop advisories.</p>
+            <span class="badge-pill-custom">⚡ Powered by Clerk Authentication</span>
+        </div>
+
+        <!-- Logged in state box -->
+        <div id="already-logged-in-box" style="display: none;" class="p-3 mb-4 rounded text-center bg-light border border-success">
+            <h5 class="text-success font-weight-bold mb-1">Signed In</h5>
+            <p class="mb-2 text-dark font-weight-bold" id="current-user-display"></p>
+            <div id="clerk-user-button" class="d-flex justify-content-center mb-2"></div>
+            <button onclick="handleSignOut()" class="btn btn-outline-danger btn-sm font-weight-bold px-3">
+                Sign Out
+            </button>
+            <a href="{{ url_for('home') }}" class="btn btn-success btn-sm font-weight-bold px-3 ml-2" style="background-color: #2ecc71; border-color: #2ecc71;">
+                Go to Dashboard
+            </a>
+        </div>
+
+        <!-- Auth Tabs -->
+        <ul class="nav nav-tabs justify-content-center mb-3" id="authTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="clerk-tab" data-toggle="tab" href="#clerk-view" role="tab">Clerk Authentication</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="dynamic-tab" data-toggle="tab" href="#dynamic-view" role="tab">Dynamic Farmer Profiles</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="authTabContent">
+            <!-- 1. Clerk Official Sign-In Container -->
+            <div class="tab-pane fade show active" id="clerk-view" role="tabpanel">
+                <div id="clerk-sign-in" class="d-flex justify-content-center my-3" style="min-height: 280px;">
+                    <div id="clerk-loading" class="text-center py-4">
+                        <div class="spinner-border text-success" role="status"></div>
+                        <p class="text-muted small mt-2">Loading Clerk UI Component...</p>
+                    </div>
+                </div>
+
+                <!-- Custom Key Input for Clerk -->
+                <div class="p-3 rounded bg-light border mt-3">
+                    <small class="font-weight-bold text-muted d-block text-uppercase mb-1">Clerk Publishable Key</small>
+                    <div class="input-group input-group-sm">
+                        <input type="text" id="custom-clerk-key" class="form-control" placeholder="pk_test_..." value="{{ clerk_publishable_key }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-success font-weight-bold" type="button" onclick="saveCustomClerkKey()">
+                                Apply Key
+                            </button>
+                        </div>
+                    </div>
+                    <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                        Get your key from <a href="https://dashboard.clerk.com" target="_blank" class="text-success font-weight-bold">dashboard.clerk.com</a>.
+                    </small>
+                </div>
+            </div>
+
+            <!-- 2. Dynamic Farmer Profiles & Quick Login -->
+            <div class="tab-pane fade" id="dynamic-view" role="tabpanel">
+                <div class="p-3 rounded bg-light border mb-3">
+                    <h6 class="font-weight-bold text-dark mb-1">⚡ Quick Login with Dynamic Profiles</h6>
+                    <small class="text-muted d-block mb-3">Instant 1-click test credentials for dynamic users:</small>
+                    
+                    <button class="preset-btn" onclick="selectPresetUser('Gubba Nithish', 'gubba.nithish@kisan.ai', 'Lead Agri Architect')">
+                        <div>
+                            <b class="text-dark d-block">Gubba Nithish</b>
+                            <small class="text-muted">gubba.nithish@kisan.ai • Farm Admin</small>
+                        </div>
+                        <span class="badge badge-success">Sign In →</span>
+                    </button>
+
+                    <button class="preset-btn" onclick="selectPresetUser('Ramesh Kumar', 'ramesh.farmer@kisan.ai', 'Paddy Farmer')">
+                        <div>
+                            <b class="text-dark d-block">Ramesh Kumar</b>
+                            <small class="text-muted">Telangana • 4.5 Acres Paddy</small>
+                        </div>
+                        <span class="badge badge-primary">Sign In →</span>
+                    </button>
+
+                    <button class="preset-btn" onclick="selectPresetUser('Sunita Sharma', 'sunita.agri@kisan.ai', 'Agronomist')">
+                        <div>
+                            <b class="text-dark d-block">Sunita Sharma</b>
+                            <small class="text-muted">Punjab • Soil Specialist</small>
+                        </div>
+                        <span class="badge badge-info">Sign In →</span>
+                    </button>
+                </div>
+
+                <!-- Custom Dynamic User Form -->
+                <form id="dynamic-user-form" onsubmit="handleCustomDynamicLogin(event)">
+                    <div class="form-group mb-2">
+                        <label class="font-weight-bold small text-muted text-uppercase mb-1">Farmer / User Full Name</label>
+                        <input type="text" id="dyn-name" class="form-control" placeholder="e.g. Anand Patel" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="font-weight-bold small text-muted text-uppercase mb-1">Email / Phone</label>
+                        <input type="email" id="dyn-email" class="form-control" placeholder="name@farm.com" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="font-weight-bold small text-muted text-uppercase mb-1">Role / Land Holding</label>
+                        <select id="dyn-role" class="form-control">
+                            <option value="Smallholder Farmer">Smallholder Farmer (1-3 Acres)</option>
+                            <option value="Commercial Farm Operator">Commercial Farm Operator (10+ Acres)</option>
+                            <option value="Agronomist & Researcher">Agronomist & Crop Consultant</option>
+                            <option value="Agricultural Cooperative Member">Agricultural Cooperative Member</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block font-weight-bold" style="background-color: #2ecc71; border-color: #2ecc71;">
+                        🚀 Sign In as Dynamic User
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Clerk SDK Lifecycle initialization
+    let clerkInstance = null;
+
+    async function initClerk() {
+        const savedKey = localStorage.getItem('clerk_publishable_key') || "{{ clerk_publishable_key }}";
+        const clerkContainer = document.getElementById('clerk-sign-in');
+        const loadingEl = document.getElementById('clerk-loading');
+
+        try {
+            if (window.Clerk) {
+                clerkInstance = window.Clerk;
+                await clerkInstance.load();
+
+                if (loadingEl) loadingEl.style.display = 'none';
+
+                if (clerkInstance.user) {
+                    showLoggedIn(clerkInstance.user.fullName || clerkInstance.user.primaryEmailAddress.emailAddress, clerkInstance.user);
+                    clerkInstance.mountUserButton(document.getElementById('clerk-user-button'));
+                } else {
+                    clerkInstance.mountSignIn(clerkContainer);
+                }
+            } else {
+                setTimeout(checkClerkFallback, 3000);
+            }
+        } catch (e) {
+            console.warn("Clerk initialization fallback triggered:", e);
+            checkClerkFallback();
+        }
+    }
+
+    function checkClerkFallback() {
+        const loadingEl = document.getElementById('clerk-loading');
+        if (loadingEl) {
+            loadingEl.innerHTML = `
+                <div class="alert alert-light border text-left p-3">
+                    <h6 class="font-weight-bold text-success mb-1">Clerk Ready for Dynamic Users</h6>
+                    <p class="small text-muted mb-2">Clerk is loaded. Enter your personal Clerk Publishable Key below, or switch to the <b>Dynamic Farmer Profiles</b> tab to test dynamic users right away!</p>
+                </div>
+            `;
+        }
+    }
+
+    function showLoggedIn(userName, userObj) {
+        document.getElementById('already-logged-in-box').style.display = 'block';
+        document.getElementById('current-user-display').innerText = '👤 Currently signed in as: ' + userName;
+        
+        // Save to dynamic local storage session
+        localStorage.setItem('kisan_dynamic_user', JSON.stringify({
+            name: userName,
+            email: userObj && userObj.email ? userObj.email : (userName + '@kisan.ai')
+        }));
+        if (typeof updateNavAuth === 'function') updateNavAuth();
+    }
+
+    function selectPresetUser(name, email, role) {
+        const userObj = { name: name, email: email, role: role };
+        localStorage.setItem('kisan_dynamic_user', JSON.stringify(userObj));
+        showLoggedIn(name, userObj);
+        window.location.href = "{{ url_for('home') }}";
+    }
+
+    function handleCustomDynamicLogin(e) {
+        e.preventDefault();
+        const name = document.getElementById('dyn-name').value.trim();
+        const email = document.getElementById('dyn-email').value.trim();
+        const role = document.getElementById('dyn-role').value;
+        const userObj = { name: name, email: email, role: role };
+
+        localStorage.setItem('kisan_dynamic_user', JSON.stringify(userObj));
+        showLoggedIn(name, userObj);
+        window.location.href = "{{ url_for('home') }}";
+    }
+
+    function handleSignOut() {
+        localStorage.removeItem('kisan_dynamic_user');
+        if (clerkInstance && clerkInstance.signOut) {
+            clerkInstance.signOut();
+        }
+        window.location.reload();
+    }
+
+    function saveCustomClerkKey() {
+        const key = document.getElementById('custom-clerk-key').value.trim();
+        if (key) {
+            localStorage.setItem('clerk_publishable_key', key);
+            alert("Clerk key saved! Reloading to mount your Clerk instance...");
+            window.location.reload();
+        }
+    }
+
+    window.addEventListener('load', function() {
+        // Check if dynamic user is already stored
+        const existing = localStorage.getItem('kisan_dynamic_user');
+        if (existing) {
+            try {
+                const u = JSON.parse(existing);
+                showLoggedIn(u.name, u);
+            } catch (err) {}
+        }
+        initClerk();
+    });
+</script>
+{% endblock %}

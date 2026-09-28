@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>{{ title }}</title>
+	<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}"/>
+
+	<!-- for-mobile-apps -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<meta name="keywords" content="Agro Harvest Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+
+	<style>
+		html {
+			font-size: 1rem;
+		}
+
+		@media (min-width: 576px) {
+			html {
+				font-size: 1.25rem;
+			}
+		}
+
+		@media (min-width: 768px) {
+			html {
+				font-size: 1.5rem;
+			}
+		}
+
+		@media (min-width: 992px) {
+			html {
+				font-size: 1.75rem;
+			}
+		}
+
+		@media (min-width: 1200px) {
+			html {
+				font-size: 2rem;
+			}
+
+			html {
+				font-size: 1rem;
+			}
+
+			h1 {
+				font-size: 1.2rem;
+			}
+
+			h2 {
+				font-size: 1.1rem;
+			}
+
+			@media (min-width: 768px) {
+				html {
+					font-size: 1.1rem;
+				}
+
+				h1 {
+					font-size: 1.3rem;
+				}
+
+				h2 {
+					font-size: 1.2rem;
+				}
+			}
+
+			@media (min-width: 991px) {
+				html {
+					font-size: 1.2rem;
+				}
+
+				h1 {
+					font-size: 1.5rem;
+				}
+
+				h2 {
+					font-size: 1.4rem;
+				}
+			}
+
+			@media (min-width: 1200px) {
+				html {
+					font-size: 1.2rem;
+				}
+
+				h1 {
+					font-size: 1.7rem;
+				}
+
+				h2 {
+					font-size: 1.6rem;
+				}
+			}
+
+		}
+	</style>
+	<script>
+		addEventListener("load", function () {
+			setTimeout(hideURLbar, 0);
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+
+	</script>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	</body>
+	<!-- css files -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel='stylesheet' type='text/css' />
+	<!-- bootstrap css -->
+	<link href="{{ url_for('static', filename='css/style.css') }}" rel='stylesheet' type='text/css' />
+	<!-- custom css -->
+	<link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet"><!-- fontawesome css -->
+	<!-- //css files -->
+	<!-- <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png?') }}"> -->
+
+
+	<script type="text/JavaScript" src="{{ url_for('static', filename='scripts/cities.js') }}"></script>
+
+
+	<!-- google fonts -->
+	<link href="//fonts.googleapis.com/css?family=Thasadith:400,400i,700,700i&amp;subset=latin-ext,thai,vietnamese"
+		rel="stylesheet">
+	<!-- //google fonts -->
+
+	<style>
+		header {
+			background-color: rgba(30, 30, 30, 1);
+			margin-top: 0rem;
+			display: block;
+
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top" style="background-color: #1a252f !important;">
+		<div class="container">
+			<a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
+				<img src="{{ url_for('static', filename='images/logo.png') }}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" alt="Kisan AI">
+				<span class="ml-2 font-weight-bold" style="color: #2ecc71; font-size: 1.4rem; letter-spacing: 1px;">Kisan AI</span>
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+				aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto align-items-center">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('home') }}">
+							<span class="lang-en">Home</span>
+							<span class="lang-hi" style="display: none;">होम</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('crop_recommend') }}">
+							<span class="lang-en">Crop</span>
+							<span class="lang-hi" style="display: none;">फसल</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('fertilizer_recommendation') }}">
+							<span class="lang-en">Fertilizer</span>
+							<span class="lang-hi" style="display: none;">उर्वरक</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('disease_prediction') }}">
+							<span class="lang-en">Disease</span>
+							<span class="lang-hi" style="display: none;">रोग निदान</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-warning font-weight-bold" href="{{ url_for('market_prices') }}">
+							📈 <span class="lang-en">Market</span>
+							<span class="lang-hi" style="display: none;">मंडी भाव</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-info font-weight-bold" href="{{ url_for('budget_predictor') }}">
+							💰 <span class="lang-en">Budget</span>
+							<span class="lang-hi" style="display: none;">लागत बजट</span>
+						</a>
+					</li>
+					<li class="nav-item ml-lg-2 my-2 my-lg-0">
+						<button id="lang-toggle-btn" onclick="toggleLanguage()" class="btn btn-sm btn-outline-warning font-weight-bold px-2 py-1" style="border-radius: 16px; font-size: 13px;">
+							🌐 <span id="lang-btn-label">हिन्दी</span>
+						</button>
+					</li>
+					<li class="nav-item ml-lg-2 my-2 my-lg-0" id="auth-nav-item">
+						<a class="btn btn-outline-success btn-sm font-weight-bold px-3 py-1" id="nav-login-btn" href="{{ url_for('login') }}" style="border-radius: 20px; color: #2ecc71; border-color: #2ecc71; transition: 0.3s all;">
+							🔑 Sign In
+						</a>
+						<div id="nav-user-profile" style="display: none;" class="align-items-center">
+							<span id="nav-user-name" class="font-weight-bold mr-2 text-white" style="font-size: 14px;"></span>
+							<button onclick="logoutDynamicUser()" class="btn btn-sm btn-outline-danger py-0 px-2 font-weight-bold" style="font-size: 12px; border-radius: 12px;">Sign Out</button>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+
+
+	{% block body %} {% endblock %}
+
+	<!-- footer -->
+	<footer class="text-center py-5">
+		<div class="container py-md-3">
+			<!-- logo -->
+			<h2 class="logo2 text-center">
+				<a href="{{ url_for('home') }}" style="color: #2ecc71; font-weight: bold; text-decoration: none;">
+					🌾 Kisan AI
+				</a>
+			</h2>
+			<!-- //logo -->
+			<!-- address -->
+			<div class="contact-left-footer mt-4">
+			</div>
+			<div class="w3l-copy text-center">
+				<p class="text-da">
+					<span class="lang-en">An Environmental Intelligence & Agricultural Decision Support Platform</span>
+					<span class="lang-hi" style="display: none;">पर्यावरण आधारित स्मार्ट कृषि एवं कृषक निर्णय सहायता प्रणाली</span>
+				</p>
+			</div>
+			<p class="homelogo">
+			<p style="font-size: 16px; font-weight: bold; color: #2ecc71;">Made by  Gubba Nithish. ❤️</p>
+			<p>&copy; Copyright 2026 Kisan AI - Made by  Gubba Nithish. ❤️</p>
+			
+		</div>
+	</footer>
+	<!-- //footer -->
+
+	<!-- move top icon -->
+	<a href="#home" class="move-top text-center"></a>
+	<!-- //move top icon -->
+
+	<script>
+		function setLanguage(lang) {
+			localStorage.setItem('kisan_lang', lang);
+			const enEls = document.querySelectorAll('.lang-en');
+			const hiEls = document.querySelectorAll('.lang-hi');
+			const btnLabel = document.getElementById('lang-btn-label');
+			
+			if (lang === 'hi') {
+				enEls.forEach(el => el.style.display = 'none');
+				hiEls.forEach(el => el.style.display = (el.tagName === 'SPAN' ? 'inline' : 'block'));
+				if (btnLabel) btnLabel.innerText = 'English';
+				document.documentElement.lang = 'hi';
+			} else {
+				enEls.forEach(el => el.style.display = (el.tagName === 'SPAN' ? 'inline' : 'block'));
+				hiEls.forEach(el => el.style.display = 'none');
+				if (btnLabel) btnLabel.innerText = 'हिन्दी';
+				document.documentElement.lang = 'en';
+			}
+		}
+
+		function toggleLanguage() {
+			const current = localStorage.getItem('kisan_lang') || 'en';
+			const next = current === 'en' ? 'hi' : 'en';
+			setLanguage(next);
+		}
+
+		function updateNavAuth() {
+			const userJson = localStorage.getItem('kisan_dynamic_user');
+			const loginBtn = document.getElementById('nav-login-btn');
+			const userProf = document.getElementById('nav-user-profile');
+			const userNameSpan = document.getElementById('nav-user-name');
+			
+			if (userJson) {
+				try {
+					const user = JSON.parse(userJson);
+					if (loginBtn) loginBtn.style.display = 'none';
+					if (userProf) userProf.style.display = 'inline-flex';
+					if (userNameSpan) userNameSpan.innerText = '👤 ' + (user.name || user.email);
+				} catch (e) {}
+			} else {
+				if (loginBtn) loginBtn.style.display = 'inline-block';
+				if (userProf) userProf.style.display = 'none';
+			}
+		}
+		function logoutDynamicUser() {
+			localStorage.removeItem('kisan_dynamic_user');
+			if (window.Clerk && window.Clerk.signOut) {
+				window.Clerk.signOut();
+			}
+			window.location.reload();
+		}
+		document.addEventListener('DOMContentLoaded', function() {
+			const savedLang = localStorage.getItem('kisan_lang') || 'en';
+			setLanguage(savedLang);
+			updateNavAuth();
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,199 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<!-- banner -->
+<section class="banner_w3lspvt" id="home">
+	<div class="csslider infinity" id="slider1">
+				<div class="banner-top">
+					<div class="overlay">
+						<div class="container">
+							<div class="w3layouts-banner-info text-center">
+								<h3 class="text-wh">🌾 Kisan AI</h3>
+								<h4 class="text-wh mx-auto my-4">
+									<b class="lang-en">AI-Powered Decisions for Precision Farming, Mandi Markets & Farm Budgets.</b>
+									<b class="lang-hi" style="display: none;">स्मार्ट खेती, लाइव मंडी भाव एवं सटीक कृषि बजट के लिए एआई मंच।</b>
+								</h4>
+								<br>
+								<h4 class="text-wh mx-auto my-3">
+									<strong class="lang-en">5 Core Solutions For Every Farmer</strong>
+									<strong class="lang-hi" style="display: none;">प्रत्येक किसान के लिए 5 मुख्य समाधान</strong>
+								</h4>
+								<p class="text-li mx-auto mt-2" style="font-size: 16px; line-height: 1.8;">
+									<span class="lang-en">
+										1. 🌱 <b>Optimal Crop Advisory</b>: Soil & Weather-aligned recommendation.<br>
+										2. 🧪 <b>Nutrient & Fertilizer Plan</b>: Balance N-P-K for peak soil vitality.<br>
+										3. 🔍 <b>Plant Disease Diagnosis</b>: Deep learning instant leaf pathology.<br>
+										4. 📈 <b>Live Stock & Mandi Rates</b>: Real-time wholesale prices & MSP benchmarks.<br>
+										5. 💰 <b>Farm Budget & ROI Predictor</b>: Calculate per-acre costs & net profit.
+									</span>
+									<span class="lang-hi" style="display: none;">
+										1. 🌱 <b>सटीक फसल चयन</b>: मिट्टी व मौसम अनुसार सर्वश्रेष्ठ फसल की सलाह।<br>
+										2. 🧪 <b>उर्वरक एवं पोषण योजना</b>: नाइट्रोजन, फास्फोरस व पोटाश का सही संतुलन।<br>
+										3. 🔍 <b>फसल रोग निदान</b>: पत्तियों की फोटो से तुरंत रोग पहचान व उपचार।<br>
+										4. 📈 <b>लाइव मंडी भाव व जिंस दरें</b>: देश की प्रमुख मंडियों के ताजा भाव व MSP।<br>
+										5. 💰 <b>कृषि बजट एवं लाभ पूर्वानुमान</b>: प्रति एकड़ लागत व शुद्ध मुनाफे का सटीक हिसाब।
+									</span>
+								</p>
+								<div class="mt-4">
+									<a href="{{ url_for('crop_recommend') }}" class="btn btn-success btn-lg mx-2 mb-2 font-weight-bold" style="border-radius: 25px; padding: 10px 25px;">
+										<span class="lang-en">Explore Advisory</span>
+										<span class="lang-hi" style="display: none;">सलाह देखें</span>
+									</a>
+									<a href="{{ url_for('market_prices') }}" class="btn btn-warning btn-lg mx-2 mb-2 font-weight-bold text-dark" style="border-radius: 25px; padding: 10px 25px;">
+										<span class="lang-en">📈 Live Mandi Rates</span>
+										<span class="lang-hi" style="display: none;">📈 लाइव मंडी भाव</span>
+									</a>
+									<a href="{{ url_for('budget_predictor') }}" class="btn btn-info btn-lg mx-2 mb-2 font-weight-bold" style="border-radius: 25px; padding: 10px 25px;">
+										<span class="lang-en">💰 Budget Predictor</span>
+										<span class="lang-hi" style="display: none;">💰 बजट कैलकुलेटर</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+	</div>
+</section>
+<!-- //banner -->
+
+<!-- core values -->
+<section class="core-value py-5">
+	<div class="container py-md-4">
+		<h3 class="heading mb-sm-5 mb-4 text-center">
+			<span class="lang-en">About Kisan AI</span>
+			<span class="lang-hi" style="display: none;">किसान एआई के बारे में</span>
+		</h3>
+		<div class="row core-grids">
+			<div class="col-lg-6 core-left">
+				<img src="{{ url_for('static', filename='images/core.jpg') }}" class="img-fluid rounded shadow" alt="Kisan AI Farming" />
+			</div>
+			<div class="col-lg-6 core-right">
+				<h3 class="mt-4">
+					<span class="lang-en">Empowering Farmers, Maximizing Yields, Transforming Indian Agriculture with Intelligence.</span>
+					<span class="lang-hi" style="display: none;">किसानों का सशक्तिकरण, उपज में वृद्धि और आधुनिक तकनीक से उन्नत कृषि।</span>
+				</h3>
+				<p class="mt-3">
+					<span class="lang-en">We combine state-of-the-art machine learning, computer vision, and real-time agri-commodity analytics to guide farmers through every phase of the agricultural cycle. From soil nutrient profiling and sowing decisions to disease treatments, market price trends, and financial budgeting.</span>
+					<span class="lang-hi" style="display: none;">हम आधुनिक मशीन लर्निंग, कंप्यूटर विजन और रीयल-टाइम जिंस बाजार विश्लेषण के माध्यम से किसानों को बुवाई से लेकर बिक्री तक के प्रत्येक चरण पर सशक्त बनाते हैं। मिट्टी परीक्षण, रोग उपचार, मंडी भाव और बजट की संपूर्ण जानकारी एक ही स्थान पर।</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- //core values -->
+
+<!-- Products & Services -->
+<section class="blog py-5" style="background-color: #f7fafc;">
+	<div class="container py-md-5">
+		<h3 class="heading mb-sm-5 mb-4 text-center">
+			<span class="lang-en">Our AI Agricultural Services</span>
+			<span class="lang-hi" style="display: none;">हमारी कृषक एआई सेवाएं</span>
+		</h3>
+		<div class="row blog-grids">
+			<div class="col-lg-4 col-md-6 mb-4">
+				<div class="card h-100 shadow-sm border-0 rounded-lg overflow-hidden">
+					<img src="{{ url_for('static', filename='images/s3.jpg') }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Crop" />
+					<div class="card-body d-flex flex-column">
+						<h4 class="font-weight-bold text-success">
+							<span class="lang-en">🌱 Crop Recommendation</span>
+							<span class="lang-hi" style="display: none;">🌱 फसल अनुशंसा</span>
+						</h4>
+						<p class="mt-2 text-muted flex-grow-1">
+							<span class="lang-en">AI recommendation for optimal crops based on N-P-K, soil pH, temperature, humidity and rainfall.</span>
+							<span class="lang-hi" style="display: none;">मिट्टी की गुणवत्ता (NPK), पीएच और स्थानीय मौसम अनुसार सबसे लाभदायक फसल का सुझाव।</span>
+						</p>
+						<a href="{{ url_for('crop_recommend') }}" class="btn btn-outline-success btn-sm mt-3 font-weight-bold">
+							<span class="lang-en">Check Crops &rarr;</span>
+							<span class="lang-hi" style="display: none;">फसल चुनें &rarr;</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 col-md-6 mb-4">
+				<div class="card h-100 shadow-sm border-0 rounded-lg overflow-hidden">
+					<img src="{{ url_for('static', filename='images/s2.jpg') }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Fertilizer" />
+					<div class="card-body d-flex flex-column">
+						<h4 class="font-weight-bold text-info">
+							<span class="lang-en">🧪 Fertilizer Suggestion</span>
+							<span class="lang-hi" style="display: none;">🧪 उर्वरक सलाह</span>
+						</h4>
+						<p class="mt-2 text-muted flex-grow-1">
+							<span class="lang-en">Diagnose soil deficiency and get custom fertilizer dosages to restore vital soil fertility.</span>
+							<span class="lang-hi" style="display: none;">मिट्टी के पोषक तत्वों की कमी को दूर करने के लिए सही खाद व पोषण का सटीक परामर्श।</span>
+						</p>
+						<a href="{{ url_for('fertilizer_recommendation') }}" class="btn btn-outline-info btn-sm mt-3 font-weight-bold">
+							<span class="lang-en">Get Fertilizer Plan &rarr;</span>
+							<span class="lang-hi" style="display: none;">खाद सलाह लें &rarr;</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 col-md-6 mb-4">
+				<div class="card h-100 shadow-sm border-0 rounded-lg overflow-hidden">
+					<img src="{{ url_for('static', filename='images/s4.jpg') }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Disease" />
+					<div class="card-body d-flex flex-column">
+						<h4 class="font-weight-bold text-danger">
+							<span class="lang-en">🔬 Plant Disease Doctor</span>
+							<span class="lang-hi" style="display: none;">🔬 पौध रोग निदान</span>
+						</h4>
+						<p class="mt-2 text-muted flex-grow-1">
+							<span class="lang-en">Upload crop leaf photo and get instant deep learning disease identification with remedies.</span>
+							<span class="lang-hi" style="display: none;">रोगग्रस्त पत्ती की फोटो अपलोड करें और एआई द्वारा तुरंत बीमारी की पहचान व उपचार पाएं।</span>
+						</p>
+						<a href="{{ url_for('disease_prediction') }}" class="btn btn-outline-danger btn-sm mt-3 font-weight-bold">
+							<span class="lang-en">Diagnose Plant &rarr;</span>
+							<span class="lang-hi" style="display: none;">रोग पहचानें &rarr;</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6 mb-4">
+				<div class="card h-100 shadow-sm border-0 rounded-lg overflow-hidden" style="border-top: 4px solid #f59e0b !important;">
+					<div class="card-body d-flex flex-column p-4">
+						<div class="d-flex justify-content-between align-items-center mb-2">
+							<h4 class="font-weight-bold text-warning mb-0">
+								<span class="lang-en">📈 Live Stock & Mandi Rates</span>
+								<span class="lang-hi" style="display: none;">📈 लाइव जिंस एवं मंडी भाव</span>
+							</h4>
+							<span class="badge badge-success px-2 py-1">Live Updates</span>
+						</div>
+						<p class="mt-2 text-muted flex-grow-1">
+							<span class="lang-en">Track live agricultural stock commodity prices, wholesale mandi arrivals, MSP floors, and daily market movements across India.</span>
+							<span class="lang-hi" style="display: none;">देश भर की प्रमुख मंडियों के जिंस भाव, न्यूनतम समर्थन मूल्य (MSP), दैनिक तेजी-मंदी और आवक की ताजा जानकारी।</span>
+						</p>
+						<a href="{{ url_for('market_prices') }}" class="btn btn-warning font-weight-bold mt-2 text-dark">
+							<span class="lang-en">View Mandi Live Rates &rarr;</span>
+							<span class="lang-hi" style="display: none;">मंडी भाव देखें &rarr;</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6 mb-4">
+				<div class="card h-100 shadow-sm border-0 rounded-lg overflow-hidden" style="border-top: 4px solid #10b981 !important;">
+					<div class="card-body d-flex flex-column p-4">
+						<div class="d-flex justify-content-between align-items-center mb-2">
+							<h4 class="font-weight-bold text-success mb-0">
+								<span class="lang-en">💰 Farm Budget & Profit Predictor</span>
+								<span class="lang-hi" style="display: none;">💰 कृषि लागत बजट एवं लाभ कैलकुलेटर</span>
+							</h4>
+							<span class="badge badge-primary px-2 py-1">ROI Calculator</span>
+						</div>
+						<p class="mt-2 text-muted flex-grow-1">
+							<span class="lang-en">Calculate total operational costs per acre (seeds, fertilizers, labor, machinery, irrigation) and forecast net profit and return on investment.</span>
+							<span class="lang-hi" style="display: none;">प्रति एकड़ खेती का संपूर्ण खर्च (बीज, खाद, सिंचाई, मजदूरी, ट्रैक्टर) जोड़ें और मंडी भाव के आधार पर शुद्ध मुनाफा व ROI जानें।</span>
+						</p>
+						<a href="{{ url_for('budget_predictor') }}" class="btn btn-success font-weight-bold mt-2">
+							<span class="lang-en">Calculate Farm Budget &rarr;</span>
+							<span class="lang-hi" style="display: none;">लागत व मुनाफा गणना करें &rarr;</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- //Products & Services -->
+
+</html>
+
+{% endblock %}

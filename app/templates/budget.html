@@ -1,0 +1,266 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<style>
+    body {
+        background-color: #f8fafc;
+    }
+    .budget-header {
+        background: linear-gradient(135deg, #065f46, #047857);
+        color: white;
+        padding: 35px 25px;
+        border-radius: 14px;
+        margin-bottom: 25px;
+    }
+    .kpi-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 22px 18px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .kpi-val {
+        font-size: 26px;
+        font-weight: 800;
+        margin-top: 6px;
+        margin-bottom: 4px;
+    }
+    .cost-card {
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 16px 20px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-left: 4px solid #10b981;
+    }
+    .badge-pill-custom {
+        background-color: #ecfdf5;
+        color: #059669;
+        font-weight: 700;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        display: inline-block;
+        margin-bottom: 8px;
+    }
+</style>
+
+<div class="container py-4">
+    <!-- Header -->
+    <div class="budget-header text-center">
+        <span class="badge-pill-custom" style="background: rgba(255, 255, 255, 0.2); color: #ffffff;">
+            💰 Precision Agri-Economics
+        </span>
+        <h2 class="font-weight-bold mb-2">
+            <span class="lang-en">Farm Cultivation Budget & Profit Predictor</span>
+            <span class="lang-hi" style="display: none;">कृषि लागत बजट एवं लाभ पूर्वानुमान</span>
+        </h2>
+        <p class="text-light mx-auto mb-0" style="max-width: 700px; font-size: 15px;">
+            <span class="lang-en">Calculate operational cultivation costs, fertilizer expenditure, labor, machinery, and project net profit based on live mandi market rates.</span>
+            <span class="lang-hi" style="display: none;">फसल की संपूर्ण लागत, खाद-बीज, जुताई, सिंचाई खर्च और मंडी भाव के आधार पर शुद्ध लाभ का सटीक आकलन करें।</span>
+        </p>
+    </div>
+
+    <!-- Parameter Config Bar -->
+    <div class="card p-4 mb-4 border-0 shadow-sm rounded-lg" style="background: #ffffff;">
+        <form method="POST" action="{{ url_for('budget_predictor') }}">
+            <div class="row">
+                <div class="col-md-3 col-6 form-group">
+                    <label class="font-weight-bold text-muted small text-uppercase">
+                        <span class="lang-en">Select Crop</span>
+                        <span class="lang-hi" style="display: none;">फसल चुनें</span>
+                    </label>
+                    <select class="form-control" name="crop">
+                        {% for k, v in benchmarks.items() %}
+                            <option value="{{ k }}" {% if k == res.crop_key %}selected{% endif %}>{{ v.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2 col-6 form-group">
+                    <label class="font-weight-bold text-muted small text-uppercase">
+                        <span class="lang-en">Land Size (Acres)</span>
+                        <span class="lang-hi" style="display: none;">जमीन (एकड़)</span>
+                    </label>
+                    <input type="number" step="0.5" min="0.5" max="200" class="form-control" name="acres" value="{{ res.acres }}" required>
+                </div>
+                <div class="col-md-3 col-6 form-group">
+                    <label class="font-weight-bold text-muted small text-uppercase">
+                        <span class="lang-en">Irrigation System</span>
+                        <span class="lang-hi" style="display: none;">सिंचाई प्रणाली</span>
+                    </label>
+                    <select class="form-control" name="irrigation_type">
+                        <option value="drip" {% if res.irrigation_type == 'drip' %}selected{% endif %}>Drip Irrigation (-25% Water/Cost)</option>
+                        <option value="sprinkler" {% if res.irrigation_type == 'sprinkler' %}selected{% endif %}>Sprinkler System (-15% Cost)</option>
+                        <option value="flood" {% if res.irrigation_type == 'flood' %}selected{% endif %}>Conventional Flood / Canal</option>
+                    </select>
+                </div>
+                <div class="col-md-2 col-6 form-group">
+                    <label class="font-weight-bold text-muted small text-uppercase">
+                        <span class="lang-en">Labor Mode</span>
+                        <span class="lang-hi" style="display: none;">मजदूरी विकल्प</span>
+                    </label>
+                    <select class="form-control" name="labor_mode">
+                        <option value="mechanized" {% if res.labor_mode == 'mechanized' %}selected{% endif %}>Mechanized Tools</option>
+                        <option value="family" {% if res.labor_mode == 'family' %}selected{% endif %}>Family Labor (Low Cost)</option>
+                        <option value="hired" {% if res.labor_mode == 'hired' %}selected{% endif %}>Hired Daily Wages</option>
+                    </select>
+                </div>
+                <div class="col-md-2 col-12 form-group d-flex align-items-end">
+                    <button type="submit" class="btn btn-success btn-block font-weight-bold py-2" style="background-color: #059669; border-color: #059669;">
+                        ⚡ Calculate
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 4 High Level Financial KPIs -->
+    <div class="row">
+        <!-- Total Budget -->
+        <div class="col-lg-3 col-md-6">
+            <div class="kpi-card" style="border-top: 4px solid #e74c3c;">
+                <span class="text-muted text-uppercase font-weight-bold small">
+                    <span class="lang-en">Total Cultivation Budget</span>
+                    <span class="lang-hi" style="display: none;">कुल अनुमानित बजट</span>
+                </span>
+                <div class="kpi-val text-danger">₹{{ "{:,}".format(res.total_budget) }}</div>
+                <small class="text-muted">₹{{ "{:,}".format(res.cost_per_acre) }} / Acre</small>
+            </div>
+        </div>
+
+        <!-- Expected Yield -->
+        <div class="col-lg-3 col-md-6">
+            <div class="kpi-card" style="border-top: 4px solid #3498db;">
+                <span class="text-muted text-uppercase font-weight-bold small">
+                    <span class="lang-en">Expected Total Yield</span>
+                    <span class="lang-hi" style="display: none;">कुल अनुमानित उत्पादन</span>
+                </span>
+                <div class="kpi-val text-primary">{{ res.expected_yield_total }} <span style="font-size: 14px;">Qtl</span></div>
+                <small class="text-muted">Avg {{ res.yield_per_acre }} Quintals / Acre</small>
+            </div>
+        </div>
+
+        <!-- Projected Revenue -->
+        <div class="col-lg-3 col-md-6">
+            <div class="kpi-card" style="border-top: 4px solid #f39c12;">
+                <span class="text-muted text-uppercase font-weight-bold small">
+                    <span class="lang-en">Gross Mandi Revenue</span>
+                    <span class="lang-hi" style="display: none;">कुल सकल आय (मंडी भाव)</span>
+                </span>
+                <div class="kpi-val text-warning">₹{{ "{:,}".format(res.projected_revenue) }}</div>
+                <small class="text-muted">Mandi Price: ₹{{ res.mandi_price }}/Qtl</small>
+            </div>
+        </div>
+
+        <!-- Net Profit -->
+        <div class="col-lg-3 col-md-6">
+            <div class="kpi-card" style="border-top: 4px solid #2ecc71;">
+                <span class="text-muted text-uppercase font-weight-bold small">
+                    <span class="lang-en">Estimated Net Profit</span>
+                    <span class="lang-hi" style="display: none;">शुद्ध अनुमानित मुनाफा</span>
+                </span>
+                <div class="kpi-val text-success">₹{{ "{:,}".format(res.net_profit) }}</div>
+                <small class="font-weight-bold text-success">ROI: {{ res.roi_percent }}%</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Itemized Cost Breakdown -->
+    <div class="row mt-2">
+        <div class="col-lg-7">
+            <div class="bg-white p-4 rounded shadow-sm border mb-4">
+                <h5 class="font-weight-bold text-dark mb-3">
+                    <span class="lang-en">📋 Itemized Expense Breakdown across {{ res.acres }} Acres</span>
+                    <span class="lang-hi" style="display: none;">📋 {{ res.acres }} एकड़ हेतु मदवार खर्च विवरण</span>
+                </h5>
+                <div class="cost-card">
+                    <div>
+                        <b class="text-dark d-block">🌾 Seeds & Nursery Material</b>
+                        <small class="text-muted">Quality certified hybrid / high-yield seeds</small>
+                    </div>
+                    <span class="font-weight-bold text-dark" style="font-size: 16px;">₹{{ "{:,}".format(res.breakdown.seed) }}</span>
+                </div>
+
+                <div class="cost-card">
+                    <div>
+                        <b class="text-dark d-block">🧪 Fertilizers & Soil Nutrients</b>
+                        <small class="text-muted">Urea, DAP, MOP and micronutrient basal mix</small>
+                    </div>
+                    <span class="font-weight-bold text-dark" style="font-size: 16px;">₹{{ "{:,}".format(res.breakdown.fertilizer) }}</span>
+                </div>
+
+                <div class="cost-card">
+                    <div>
+                        <b class="text-dark d-block">💧 Irrigation & Energy</b>
+                        <small class="text-muted">Pumping electric power / diesel charges</small>
+                    </div>
+                    <span class="font-weight-bold text-dark" style="font-size: 16px;">₹{{ "{:,}".format(res.breakdown.irrigation) }}</span>
+                </div>
+
+                <div class="cost-card">
+                    <div>
+                        <b class="text-dark d-block">🛡️ Plant Protection & Sprays</b>
+                        <small class="text-muted">Preventive fungicide, bio-pesticides</small>
+                    </div>
+                    <span class="font-weight-bold text-dark" style="font-size: 16px;">₹{{ "{:,}".format(res.breakdown.pesticide) }}</span>
+                </div>
+
+                <div class="cost-card">
+                    <div>
+                        <b class="text-dark d-block">🚜 Machinery, Tractor & Tillage</b>
+                        <small class="text-muted">Field preparation, rotavator, sowing equipment</small>
+                    </div>
+                    <span class="font-weight-bold text-dark" style="font-size: 16px;">₹{{ "{:,}".format(res.breakdown.machinery) }}</span>
+                </div>
+
+                <div class="cost-card">
+                    <div>
+                        <b class="text-dark d-block">👷 Labor & Harvesting</b>
+                        <small class="text-muted">Weeding, spraying, picking and threshing</small>
+                    </div>
+                    <span class="font-weight-bold text-dark" style="font-size: 16px;">₹{{ "{:,}".format(res.breakdown.labor) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profit Optimization Tips -->
+        <div class="col-lg-5">
+            <div class="p-4 bg-white rounded shadow-sm border mb-4">
+                <h5 class="font-weight-bold text-success mb-3">
+                    💡 <span class="lang-en">Cost Reduction & ROI Tips</span>
+                    <span class="lang-hi" style="display: none;">लागत बचत एवं मुनाफा बढ़ाने के उपाय</span>
+                </h5>
+                <ul class="pl-3" style="font-size: 14px; line-height: 1.8; color: #475569;">
+                    <li>
+                        <span class="lang-en"><b>Switch to Drip:</b> Saves up to <b>35% water & power bills</b> while increasing fertilizer uptake via fertigation.</span>
+                        <span class="lang-hi" style="display: none;"><b>ड्रिप सिंचाई अपनाएं:</b> पानी व बिजली खर्च में <b>35% तक बचत</b> और उर्वरक की खपत अधिक प्रभावी।</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><b>Soil Testing:</b> Prevents over-purchasing Nitrogen; saves an estimated <b>₹1,200/acre</b> on unnecessary DAP.</span>
+                        <span class="lang-hi" style="display: none;"><b>मिट्टी जांच:</b> यूरिया और डीएपी के अनावश्यक खर्च से <b>₹1,200/एकड़</b> तक की बचत।</span>
+                    </li>
+                    <li>
+                        <span class="lang-en"><b>Direct Mandi Sale:</b> Target selling during peak trading days on the <a href="{{ url_for('market_prices') }}" class="font-weight-bold text-success">Mandi Rates</a> page.</span>
+                        <span class="lang-hi" style="display: none;"><b>मंडी में सही समय पर बिक्री:</b> भाव की तेजी देखकर <a href="{{ url_for('market_prices') }}" class="font-weight-bold text-success">मंडी भाव</a> पृष्ठ पर देखकर 8% तक अधिक मूल्य पाएं।</span>
+                    </li>
+                </ul>
+                <div class="mt-4 pt-3 border-top">
+                    <a href="{{ url_for('market_prices') }}" class="btn btn-outline-success font-weight-bold btn-block">
+                        📈 <span class="lang-en">Check Live Mandi Prices →</span>
+                        <span class="lang-hi" style="display: none;">लाइव मंडी भाव देखें →</span>
+                    </a>
+                    <a href="{{ url_for('crop_recommend') }}" class="btn btn-outline-primary font-weight-bold btn-block mt-2">
+                        🌾 <span class="lang-en">Test Crop Recommendation →</span>
+                        <span class="lang-hi" style="display: none;">फसल सलाह लें →</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

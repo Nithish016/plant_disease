@@ -1,0 +1,190 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<style>
+    body {
+        background-color: #f8fafc;
+    }
+    .market-banner {
+        background: linear-gradient(135deg, #111827, #1f2937);
+        color: white;
+        padding: 40px 0;
+        border-radius: 14px;
+        margin-bottom: 25px;
+    }
+    .commodity-card {
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        padding: 22px;
+        margin-bottom: 20px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .commodity-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    }
+    .price-tag {
+        font-size: 26px;
+        font-weight: 800;
+        color: #0f172a;
+    }
+    .badge-pill-custom {
+        background-color: #e8f8f0;
+        color: #27ae60;
+        font-weight: 700;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+    .ticker-bar {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 10px 18px;
+        overflow-x: auto;
+        white-space: nowrap;
+        margin-bottom: 25px;
+    }
+    .ticker-item {
+        display: inline-block;
+        margin-right: 25px;
+        font-size: 14px;
+    }
+</style>
+
+<div class="container py-4">
+    <!-- Market Header -->
+    <div class="market-banner text-center">
+        <span class="badge-pill-custom" style="background: rgba(46, 204, 113, 0.25); color: #a3e635;">
+            📈 Live Mandi Intelligence
+        </span>
+        <h2 class="font-weight-bold mb-2">
+            <span class="lang-en">Agricultural Commodity Stock & Mandi Prices</span>
+            <span class="lang-hi" style="display: none;">कृषि जिंस एवं मंडी लाइव भाव</span>
+        </h2>
+        <p class="text-light mx-auto mb-0" style="max-width: 650px; font-size: 15px;">
+            <span class="lang-en">Real-time market rates across major wholesale mandis, MSP benchmarks, daily price swings, and trading volume.</span>
+            <span class="lang-hi" style="display: none;">प्रमुख थोक मंडियों के वास्तविक भाव, न्यूनतम समर्थन मूल्य (MSP), दैनिक बदलाव और आवक मात्रा।</span>
+        </p>
+    </div>
+
+    <!-- Live Ticker Bar -->
+    <div class="ticker-bar shadow-sm">
+        <span class="font-weight-bold text-success mr-3">
+            🔴 LIVE TICKER:
+        </span>
+        {% for p in prices %}
+            <div class="ticker-item">
+                <b>{{ p.name_en }}</b>: ₹{{ p.price }}/Qtl 
+                <span class="{% if p.is_positive %}text-success{% else %}text-danger{% endif %} font-weight-bold">
+                    {{ p.change }}
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6 mb-2 mb-md-0">
+            <input type="text" id="market-search" class="form-control form-control-lg shadow-sm" placeholder="🔍 Search crop (Wheat, Tomato, Soybean, मक्का, कपास)..." onkeyup="filterCommodities()">
+        </div>
+        <div class="col-md-6 text-md-right">
+            <a href="{{ url_for('budget_predictor') }}" class="btn btn-success font-weight-bold px-4 py-2" style="background-color: #2ecc71; border-color: #2ecc71;">
+                💰 <span class="lang-en">Estimate Profit in Budget Predictor →</span>
+                <span class="lang-hi" style="display: none;">बजट कैलकुलेटर में मुनाफा जानें →</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Commodity Cards Grid -->
+    <div class="row" id="commodity-grid">
+        {% for p in prices %}
+            <div class="col-lg-6 commodity-item" data-name="{{ p.name_en.lower() }} {{ p.name_hi }}">
+                <div class="commodity-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <h5 class="font-weight-bold text-dark mb-0">
+                                <span class="lang-en">{{ p.name_en }}</span>
+                                <span class="lang-hi" style="display: none;">{{ p.name_hi }}</span>
+                            </h5>
+                            <small class="text-muted font-weight-bold">
+                                <span class="lang-en">{{ p.name_hi }} | Mandi: {{ p.mandi }}</span>
+                                <span class="lang-hi" style="display: none;">{{ p.name_en }} | मंडी: {{ p.mandi }}</span>
+                            </small>
+                        </div>
+                        <span class="badge badge-pill {% if p.trend == 'Bullish' or p.trend == 'High Demand' %}badge-success{% elif p.trend == 'Bearish' %}badge-danger{% else %}badge-secondary{% endif %} p-2">
+                            {{ p.trend }}
+                        </span>
+                    </div>
+
+                    <div class="row align-items-center my-3">
+                        <div class="col-6">
+                            <span class="text-muted small font-weight-bold d-block text-uppercase">
+                                <span class="lang-en">Mandi Price</span>
+                                <span class="lang-hi" style="display: none;">मंडी भाव</span>
+                            </span>
+                            <div class="price-tag">
+                                ₹{{ p.price }} <span style="font-size: 14px; font-weight: normal; color: #64748b;">/ <span class="lang-en">Quintal</span><span class="lang-hi" style="display: none;">क्विंटल</span></span>
+                            </div>
+                        </div>
+                        <div class="col-6 text-right">
+                            <span class="text-muted small font-weight-bold d-block text-uppercase">
+                                <span class="lang-en">24h Movement</span>
+                                <span class="lang-hi" style="display: none;">24 घंटे का बदलाव</span>
+                            </span>
+                            <div style="font-size: 20px; font-weight: 800;" class="{% if p.is_positive %}text-success{% else %}text-danger{% endif %}">
+                                {% if p.change_val > 0 %}+{% endif %}₹{{ p.change_val }} ({{ p.change }})
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-2 rounded bg-light border">
+                        <div class="row text-center small">
+                            <div class="col-4">
+                                <span class="text-muted d-block font-weight-bold">
+                                    <span class="lang-en">Govt MSP</span>
+                                    <span class="lang-hi" style="display: none;">सरकारी MSP</span>
+                                </span>
+                                <b>₹{{ p.msp }}/Qtl</b>
+                            </div>
+                            <div class="col-4 border-left border-right">
+                                <span class="text-muted d-block font-weight-bold">
+                                    <span class="lang-en">Day Range</span>
+                                    <span class="lang-hi" style="display: none;">दैनिक सीमा</span>
+                                </span>
+                                <b>₹{{ p.low }} - ₹{{ p.high }}</b>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-muted d-block font-weight-bold">
+                                    <span class="lang-en">Mandi Arrivals</span>
+                                    <span class="lang-hi" style="display: none;">मंडी आवक</span>
+                                </span>
+                                <b>{{ "{:,}".format(p.arrival_quintals) }} Qtl</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function filterCommodities() {
+        const query = document.getElementById('market-search').value.toLowerCase();
+        const items = document.querySelectorAll('.commodity-item');
+        items.forEach(item => {
+            const name = item.getAttribute('data-name');
+            if (name.includes(query)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+</script>
+{% endblock %}
